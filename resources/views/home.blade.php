@@ -7,7 +7,8 @@
 </head>
 <body>
     <div class="page">
-        <img class="cam" src="{{ $stream_url }}" alt="live webcam image">
+        <div class="cam-background" style="background-image:url('{{ $stream_url }}');"></div>
+        <div class="cam" style="background-image:url('{{ $stream_url }}');"></div>
     </div>
 </body>
 </html>
