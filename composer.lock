@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d89f77b3a3eb92a80721cae6ea5fdf55",
-    "content-hash": "3bbee0eb882fba009d9886d9d7f4b79e",
+    "hash": "d7de2cb61f7018a12de483f8d1a282ae",
+    "content-hash": "0eb495586f41b744d351345cb19834ad",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -73,6 +73,132 @@
                 "string"
             ],
             "time": "2015-11-06 14:35:42"
+        },
+        {
+            "name": "eher/oauth",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EHER/OAuth.git",
+                "reference": "935c1f7709d1c1457de9e250d0e5f29cac06e507"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EHER/OAuth/zipball/935c1f7709d1c1457de9e250d0e5f29cac06e507",
+                "reference": "935c1f7709d1c1457de9e250d0e5f29cac06e507",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "eher/phpunit": "1.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Eher\\OAuth": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "OAuth 1 PHP Library",
+            "time": "2012-12-13 23:48:10"
+        },
+        {
+            "name": "guzzle/guzzle",
+            "version": "v3.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "4de0618a01b34aa1c8c33a3f13f396dcd3882eba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/4de0618a01b34aa1c8c33a3f13f396dcd3882eba",
+                "reference": "4de0618a01b34aa1c8c33a3f13f396dcd3882eba",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.3",
+                "symfony/event-dispatcher": ">=2.1"
+            },
+            "replace": {
+                "guzzle/batch": "self.version",
+                "guzzle/cache": "self.version",
+                "guzzle/common": "self.version",
+                "guzzle/http": "self.version",
+                "guzzle/inflection": "self.version",
+                "guzzle/iterator": "self.version",
+                "guzzle/log": "self.version",
+                "guzzle/parser": "self.version",
+                "guzzle/plugin": "self.version",
+                "guzzle/plugin-async": "self.version",
+                "guzzle/plugin-backoff": "self.version",
+                "guzzle/plugin-cache": "self.version",
+                "guzzle/plugin-cookie": "self.version",
+                "guzzle/plugin-curlauth": "self.version",
+                "guzzle/plugin-error-response": "self.version",
+                "guzzle/plugin-history": "self.version",
+                "guzzle/plugin-log": "self.version",
+                "guzzle/plugin-md5": "self.version",
+                "guzzle/plugin-mock": "self.version",
+                "guzzle/plugin-oauth": "self.version",
+                "guzzle/service": "self.version",
+                "guzzle/stream": "self.version"
+            },
+            "require-dev": {
+                "doctrine/cache": "*",
+                "monolog/monolog": "1.*",
+                "phpunit/phpunit": "3.7.*",
+                "psr/log": "1.0.*",
+                "symfony/class-loader": "*",
+                "zendframework/zend-cache": "<2.3",
+                "zendframework/zend-log": "<2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Guzzle": "src/",
+                    "Guzzle\\Tests": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Guzzle Community",
+                    "homepage": "https://github.com/guzzle/guzzle/contributors"
+                }
+            ],
+            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "rest",
+                "web service"
+            ],
+            "abandoned": "guzzlehttp/guzzle",
+            "time": "2014-01-28 22:29:15"
         },
         {
             "name": "illuminate/auth",
@@ -2045,6 +2171,55 @@
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
             "time": "2016-08-05 08:37:39"
+        },
+        {
+            "name": "tumblr/tumblr",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tumblr/tumblr.php.git",
+                "reference": "efbae0a1a4079eeb8b895a40314b04499e63b1b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tumblr/tumblr.php/zipball/efbae0a1a4079eeb8b895a40314b04499e63b1b7",
+                "reference": "efbae0a1a4079eeb8b895a40314b04499e63b1b7",
+                "shasum": ""
+            },
+            "require": {
+                "eher/oauth": "1.0.*",
+                "guzzle/guzzle": ">=3.1.0,<4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Tumblr\\API": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "John Crepezzi",
+                    "email": "john.crepezzi@gmail.com",
+                    "homepage": "https://github.com/seejohnrun",
+                    "role": "developer"
+                }
+            ],
+            "description": "Official Tumblr PHP Client",
+            "homepage": "https://github.com/tumblr/tumblr.php",
+            "keywords": [
+                "api",
+                "gif",
+                "sdk",
+                "tumblr"
+            ],
+            "time": "2014-12-16 21:06:57"
         },
         {
             "name": "vlucas/phpdotenv",
