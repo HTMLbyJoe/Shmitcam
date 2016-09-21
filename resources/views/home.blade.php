@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>The Shmitcam</title>
     <link rel="stylesheet" href="/styles/main.css">
+    <meta property="og:image" content="{{ $stream_url }}">
     <script>
     var SHMITCAM = {!! json_encode($shmitcam_js_global) !!};
     </script>
