@@ -29,10 +29,13 @@ class WebcamController extends Controller
         }
 
         $file = File::get($image_path);
-        $type = File::mimeType($image_path);
+        $mime_type = File::mimeType($image_path);
+        $last_modified_int = File::lastModified($image_path);
+        $last_modified_gmt = gmdate('D, d M Y H:i:s \G\M\T', $last_modified_int);
 
         $response = response($file, 200);
-        $response->header('Content-Type', $type);
+        $response->header('Content-Type', $mime_type);
+        $response->header('Last-Modified', $last_modified_gmt);
 
         return $response;
     }
