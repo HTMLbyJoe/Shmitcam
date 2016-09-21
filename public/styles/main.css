@@ -38,3 +38,42 @@ body {
     top: 0;
     left: 0;
 }
+
+.controls {
+    opacity: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 20px;
+    transition: 250ms;
+}
+
+body:hover .controls,
+body:focus .controls,
+body:hover .view-source,
+body:focus .view-source {
+    opacity: 1;
+}
+
+.controls [role="button"],
+.view-source {
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    font-size: 40px;
+}
+
+.controls [role="button"]:active,
+.view-source:active {
+    display: inline-block;
+    transform: scale(0.9);
+}
+
+.view-source {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-decoration: none;
+    opacity: 0;
+}

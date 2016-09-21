@@ -1,5 +1,7 @@
 var cam_el = document.querySelector('.cam');
 var cam_backbround_el = document.querySelector('.cam-background');
+var open_gallery_el = document.querySelector('.controls > .open-gallery');
+var take_snapshot_el = document.querySelector('.controls > .take-snapshot');
 
 function refreshWebcam() {
     var webcam_url = SHMITCAM.url + '?' + Date.now();
@@ -30,3 +32,11 @@ function postToTumblr() {
         }
     });
 }
+
+open_gallery_el.addEventListener('click', function(e){
+    window.open('https://shmitcam.tumblr.com');
+});
+
+take_snapshot_el.addEventListener('click', function(e){
+    postToTumblr();
+});
