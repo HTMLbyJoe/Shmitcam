@@ -16,12 +16,16 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the webcam
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('home', ['stream_url' => route('cam.url.latest')]);
+        $locals = [
+            'stream_url' => route('cam.url.latest'),
+            'webcam_info' => ['url' => route('cam.url.latest')],
+        ];
+        return view('home', $locals);
     }
 }
