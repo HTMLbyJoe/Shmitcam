@@ -5,7 +5,7 @@
     <title>The Shmitcam</title>
     <link rel="stylesheet" href="/styles/main.css">
     <script>
-    var SHMITCAM = {!! json_encode($webcam_info) !!};
+    var SHMITCAM = {!! json_encode($shmitcam_js_global) !!};
     </script>
 </head>
 <body>

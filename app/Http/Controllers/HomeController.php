@@ -24,7 +24,10 @@ class HomeController extends Controller
     {
         $locals = [
             'stream_url' => route('cam.url.latest'),
-            'webcam_info' => ['url' => route('cam.url.latest')],
+            'shmitcam_js_global' => [
+                'url' => route('cam.url.latest'),
+                'refresh_interval' => intval(env('WEBCAM_REFRESH_INTERVAL'))
+            ],
         ];
         return view('home', $locals);
     }

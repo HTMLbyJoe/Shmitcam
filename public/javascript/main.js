@@ -16,4 +16,4 @@ function updateBackgroundImage(element, url) {
     element.style.backgroundImage = 'url("' + url + '")';
 }
 
-window.setInterval(refreshWebcam, 250);
+window.setInterval(refreshWebcam, SHMITCAM.refresh_interval);
