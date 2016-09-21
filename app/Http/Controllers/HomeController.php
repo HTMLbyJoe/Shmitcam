@@ -22,6 +22,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home', ['stream_url' => env('WEBCAM_STREAM_URL')]);
+        return view('home', ['stream_url' => route('cam.url.latest')]);
     }
 }

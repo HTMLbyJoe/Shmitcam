@@ -12,3 +12,4 @@
 */
 
 $app->get('/', 'HomeController@index');
+$app->get('/latest-jpg', ['uses' => 'WebcamController@still', 'as' => 'cam.url.latest']);
