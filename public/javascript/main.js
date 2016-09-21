@@ -17,3 +17,16 @@ function updateBackgroundImage(element, url) {
 }
 
 window.setInterval(refreshWebcam, SHMITCAM.refresh_interval);
+
+function postToTumblr() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/save/tumblr');
+    xhr.send(null);
+
+    xhr.addEventListener('readystatechange', function(){
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            window.open(response.permalink);
+        }
+    });
+}
