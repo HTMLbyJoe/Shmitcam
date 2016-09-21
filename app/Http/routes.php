@@ -13,3 +13,4 @@
 
 $app->get('/', 'HomeController@index');
 $app->get('/latest-jpg', ['uses' => 'WebcamController@still', 'as' => 'cam.url.latest']);
+$app->post('/save/tumblr', ['uses' => 'WebcamController@uploadTumblr', 'as' => 'cam.upload.tumblr']);
