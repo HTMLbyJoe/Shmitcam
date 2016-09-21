@@ -20,7 +20,7 @@ function updateBackgroundImage(element, url) {
 
 window.setInterval(refreshWebcam, SHMITCAM.refresh_interval);
 
-function postToTumblr() {
+function postToTumblr(callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/save/tumblr');
     xhr.send(null);
@@ -28,7 +28,7 @@ function postToTumblr() {
     xhr.addEventListener('readystatechange', function(){
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
-            window.open(response.permalink);
+            callback(response);
         }
     });
 }
@@ -38,5 +38,9 @@ open_gallery_el.addEventListener('click', function(e){
 });
 
 take_snapshot_el.addEventListener('click', function(e){
-    postToTumblr();
+    var win = window.open();
+    win.document.body.innerHTML = '<div style="text-align:center;"><h1>⏳ Uploading</h1><h2>Please wait...</h2></div>';
+    postToTumblr(function(response){
+        win.location = response.permalink;
+    });
 });
