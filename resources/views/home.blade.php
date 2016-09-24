@@ -15,10 +15,10 @@
         <div class="cam-background" style="background-image:url('{{ $stream_url }}');"></div>
         <div class="cam" style="background-image:url('{{ $stream_url }}');"></div>
         <div class="controls">
-            <span class="open-gallery" role="button">🖼</span>
-            <span class="take-snapshot" role="button">📸</span>
+            <span title="View saved snapshots on Tumblr" class="open-gallery" role="button">🖼</span>
+            <span title="Take snapshot" class="take-snapshot" role="button">📸</span>
         </div>
-        <a href="https://github.com/JoeAnzalone/shmitcam" target="_blank" class="view-source">💿</a>
+        <a title="View source code on GitHub" href="https://github.com/JoeAnzalone/shmitcam" target="_blank" class="view-source">💿</a>
     </div>
     <script src="/javascript/main.js"></script>
 </body>
