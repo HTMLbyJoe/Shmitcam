@@ -26,7 +26,21 @@ class SaveFrameCommand extends Command {
      */
     public function fire()
     {
+        $ignore_offline = $this->input->getOption('ignore-offline');
+
+        if (!env('WEBCAM_ONLINE') && !$ignore_offline) {
+            $this->error('Webcam is offline. Set WEBCAM_ONLINE to `true` in .env or override with --ignore-offline=true');
+            return false;
+        }
+
+        $latest = env('WEBCAM_IMAGE_PATH');
+
         $this->info('Taking a pic');
+        $dir = base_path('storage/pending-frames/');
+
+        $filename = date('Y-m-d_H:i:s') . '.jpg';
+
+        copy($latest, $dir . $filename);
     }
 
     /**
@@ -37,8 +51,7 @@ class SaveFrameCommand extends Command {
     protected function getOptions()
     {
         return [
-            ['host', null, InputOption::VALUE_OPTIONAL, 'The host address to serve the application on.', 'localhost'],
-            ['port', null, InputOption::VALUE_OPTIONAL, 'The port to serve the application on.', 8000],
+            ['ignore-offline', null, InputOption::VALUE_OPTIONAL, 'Do this even if the camera is offline', false],
         ];
     }
 
