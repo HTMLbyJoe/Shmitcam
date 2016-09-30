@@ -66,10 +66,16 @@ class SaveFrameCommand extends Command {
                     continue;
                 }
 
-                $frame = new \Imagick($pending_dir . $filename);
-                $animation->addImage($frame);
-                $animation->setImageDelay($delay);
-                $animation->nextImage();
+                try {
+                    $frame = new \Imagick($pending_dir . $filename);
+                    $animation->addImage($frame);
+                    $animation->setImageDelay($delay);
+                    $animation->nextImage();
+                } catch (\Exception $e) {
+                    $error_message = 'Something weird happened while getting this frame. Skipping it.' . "\n";
+                    $error_message .= $e->getMessage();
+                    $this->error($error_message);
+                }
             }
 
             $animation->writeImages($pending_dir . 'animation.gif', true);
