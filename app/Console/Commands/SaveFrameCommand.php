@@ -38,6 +38,10 @@ class SaveFrameCommand extends Command {
         $this->info('Taking a pic');
         $dir = base_path('storage/pending-frames/');
 
+        if (!file_exists($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
         $filename = date('Y-m-d_H:i:s') . '.jpg';
 
         copy($latest, $dir . $filename);
