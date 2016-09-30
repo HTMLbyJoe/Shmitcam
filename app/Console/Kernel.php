@@ -24,6 +24,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->command('cam:save', ['--frames' => 20])->everyFiveMinutes();
     }
 }
