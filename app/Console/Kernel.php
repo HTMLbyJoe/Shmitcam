@@ -24,6 +24,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('cam:save', ['--frames' => 20])->everyFiveMinutes();
+        $interval = env('TIME_LAPSE_GIF_CAPTURE_INTERVAL');
+        $interval = intval($interval);
+
+        if (!$interval) {
+            return false;
+        }
+
+        $schedule->command('cam:save', [
+            '--frames' => env('TIME_LAPSE_GIF_FRAMES'),
+            '--delay' => env('TIME_LAPSE_GIF_ANIMATION_DELAY'),
+        ])->cron("*/$interval * * * * *");
     }
 }
