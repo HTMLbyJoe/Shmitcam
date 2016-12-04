@@ -1,21 +1,31 @@
-# Lumen PHP Framework
+Shmitcam
+========
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+A web app that auto-refreshes a given JPEG to make it look like a semi-live webcam stream.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+Also includes a button to upload to Tumblr at no extra charge!
 
-## Official Documentation
+Installation
+------------
+1. Clone the repo:
+```
+git clone https://github.com/JoeAnzalone/Shmitcam
+```
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+2. Install via [Composer](https://getcomposer.org/):
+```
+composer install
+```
 
-## Security Vulnerabilities
+3. Fill out all the required environment variables in `.env`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+4. Set up the cron job:
+```
+* * * * * /usr/local/bin/php-7.0 /home/joe/shmitcam/artisan schedule:run >> /dev/null 2>&1
+```
 
-## License
+License
+-------
+Shmitcam is open-sourced software licensed under the [BSD 3-Clause license.](https://opensource.org/licenses/BSD-3-Clause)
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+Shmitcam uses the wonderful [Lumen PHP Framework](https://lumen.laravel.com), which is licensed under [the MIT license.](https://opensource.org/licenses/MIT)
