@@ -35,7 +35,23 @@ class MakeGifCommand extends Command {
 
         $stills_dir = base_path('storage/images/stills/');
 
-        // TODO: Calculate which frames we need to make the GIF, then make it
+        $start_int = strtotime($time_start);
+        $end_int = strtotime($time_end);
+
+        // How many seconds the GIF should represent
+        $span_seconds = $end_int - $start_int;
+
+        // How many seconds should pass by per frame
+        $seconds_between_frames = $span_seconds / ($frames - 1);
+
+        for ($i = 0; $i < $frames; $i++) {
+            $frame_times[$i] = $start_int + ($seconds_between_frames * $i);
+            $frame_times[$i] = date('Y-m-d H:i:s', $frame_times[$i]);
+        }
+
+        $this->info(implode($frame_times, "\n"));
+
+        // TODO: Grab the actual frames that are closest to these times, and turn them into a GIF
     }
 
     /**
