@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\File;
 use \Illuminate\Http\Request;
+use \Cache;
 
 class WebcamController extends Controller
 {
@@ -93,7 +94,23 @@ class WebcamController extends Controller
             return true;
         }
 
-        // TODO: Add rate limiting logic for untrusted IPs here
+        $cache_key_global = 'count:global';
+        $count_global = Cache::get($cache_key_global, 0);
+
+        if ($count_global >= env('LIMIT_GLOBAL_CAPTURES_PER_INTERVAL')) {
+            return false;
+        }
+
+        $cache_key_ip = 'count:ip:' . $ip_address;
+        $count_ip = Cache::get($cache_key_ip, 0);
+
+        if ($count_ip >= env('RATE_LIMIT_IP_CAPTURES_PER_INTERVAL')) {
+            return false;
+        }
+
+        Cache::put($cache_key_global, $count_global + 1, env('RATE_LIMIT_CLEAR_INTERVAL'));
+        Cache::put($cache_key_ip, $count_ip + 1, env('RATE_LIMIT_CLEAR_INTERVAL'));
+
         return true;
     }
 }
