@@ -27,6 +27,8 @@ $app->withFacades();
 
 // $app->withEloquent();
 
+$app->configure('trusted-ips');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings

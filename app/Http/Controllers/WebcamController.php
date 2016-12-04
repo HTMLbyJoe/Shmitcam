@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\File;
+use \Illuminate\Http\Request;
 
 class WebcamController extends Controller
 {
@@ -45,9 +46,9 @@ class WebcamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function uploadTumblr()
+    public function uploadTumblr(Request $request)
     {
-        if (!env('WEBCAM_ONLINE')) {
+        if (!env('WEBCAM_ONLINE') || !self::allowedToCapture($request->ip())) {
             return false;
         }
 
@@ -76,5 +77,23 @@ class WebcamController extends Controller
             'post_id' => $post_id,
             'permalink' => $permalink,
         ];
+    }
+
+    /**
+     * Whether or not the requesting IP has permission
+     * to upload a webcam snapshot to Tumblr
+     * @return boolean
+     */
+    public static function allowedToCapture($ip_address)
+    {
+        $trusted_ips = config('trusted-ips');
+
+        if (!empty($trusted_ips) && in_array($ip_address, $trusted_ips)) {
+            // Allow whitelisted IPs to bypass rate limiting
+            return true;
+        }
+
+        // TODO: Add rate limiting logic for untrusted IPs here
+        return true;
     }
 }
