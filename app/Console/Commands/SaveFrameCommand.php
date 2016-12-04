@@ -42,6 +42,16 @@ class SaveFrameCommand extends Command {
         $images_dir = base_path('storage/images/');
         $pending_dir = $images_dir . 'pending-frames/';
 
+        if (file_exists($pending_dir . 'animation.gif')) {
+            // The GIF should not exist yet!
+            // If it does, that means the process was killed while creating it
+            // So let's just bail out of this whole thing since there are probably too many frames now
+            $this->error('GIF found where it doesn\'t belong. Bailing out now.');
+            $broken_dir = $images_dir . date('Y-m-d_H-i-s') . '_killed';
+            rename($pending_dir, $broken_dir);
+            return false;
+        }
+
         if (!file_exists($pending_dir)) {
             mkdir($pending_dir, 0755, true);
         }
