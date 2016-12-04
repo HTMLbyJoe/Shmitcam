@@ -34,7 +34,7 @@ function postToTumblr(callback) {
 }
 
 open_gallery_el.addEventListener('click', function(e){
-    window.open('https://shmitcam.tumblr.com');
+    window.open(SHMITCAM.tumblr_blog.url);
 });
 
 take_snapshot_el.addEventListener('click', function(e){
