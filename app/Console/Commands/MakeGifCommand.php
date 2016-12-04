@@ -28,12 +28,10 @@ class MakeGifCommand extends Command {
     {
         $time_start = $this->input->getOption('time-start');
         $time_end = $this->input->getOption('time-end');
-        $frames = $this->input->getOption('frames');
+        $frame_count = $this->input->getOption('frames');
         $delay = $this->input->getOption('delay');
 
         $this->info("The GIF will span from $time_start to $time_end");
-
-        $stills_dir = base_path('storage/images/stills/');
 
         $start_int = strtotime($time_start);
         $end_int = strtotime($time_end);
@@ -42,16 +40,22 @@ class MakeGifCommand extends Command {
         $span_seconds = $end_int - $start_int;
 
         // How many seconds should pass by per frame
-        $seconds_between_frames = $span_seconds / ($frames - 1);
+        $seconds_between_frames = $span_seconds / ($frame_count - 1);
 
-        for ($i = 0; $i < $frames; $i++) {
+        for ($i = 0; $i < $frame_count; $i++) {
             $frame_times[$i] = $start_int + ($seconds_between_frames * $i);
-            $frame_times[$i] = date('Y-m-d H:i:s', $frame_times[$i]);
         }
 
-        $this->info(implode($frame_times, "\n"));
+        $huge_range_of_files = $this->getAllFilePaths($frame_times);
 
-        // TODO: Grab the actual frames that are closest to these times, and turn them into a GIF
+        $close_enough = [];
+        foreach ($frame_times as $key => $timestamp) {
+            $close_enough[] = $this->findClosest($huge_range_of_files, $timestamp);
+        }
+
+        $this->info(implode($close_enough, "\n"));
+
+        // TODO: Turn these files into a GIF
     }
 
     /**
@@ -67,6 +71,90 @@ class MakeGifCommand extends Command {
             ['frames', null, InputOption::VALUE_OPTIONAL, 'How many frames to use for the GIF', 20],
             ['delay', null, InputOption::VALUE_OPTIONAL, 'The amount of time expressed in \'ticks\' that each frame should be displayed for', 20],
         ];
+    }
+
+    /**
+     * Get the entire range of actual filepaths that we should choose our frames from
+     *
+     * @return string The filename
+     */
+    private function getAllFilePaths($frame_times)
+    {
+        $hour_dirs = $this->getAllHourDirectories($frame_times);
+
+        $jpgs = [];
+        foreach($hour_dirs as $dir) {
+            $jpgs += $this->getAllJpgs($dir);
+        }
+
+        return $jpgs;
+    }
+
+    /**
+     * Assemble a possible frame filepath for a given timestamp
+     *
+     * @return string The filename
+     */
+    private function getAllHourDirectories($frame_times)
+    {
+        $stills_dir = base_path('storage/images/stills/');
+
+        $hour_dirs = [];
+        foreach ($frame_times as $key => $time) {
+            $hour_dirs[] = $stills_dir . date('Y/m/d/H/', $time);
+        }
+
+        return array_unique($hour_dirs);
+    }
+
+    /**
+     * Get all JPG files from the given directory
+     *
+     * @return string The filename
+     */
+    private function getAllJpgs($dir)
+    {
+
+        if (!is_dir($dir)) {
+            return [];
+        }
+
+        $files = scandir($dir);
+
+        $jpgs = [];
+
+        foreach($files as $filename) {
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+            if ($filename[0] === '.' || $extension !== 'jpg') {
+                continue;
+            }
+
+            $timestamp = \DateTime::createFromFormat('Y-m-d_H-i-s\.\j\p\g', $filename)->getTimestamp();
+            $jpgs[$timestamp] = $dir . $filename;
+        }
+
+        return $jpgs;
+    }
+
+    /**
+     * Find the closest filepath to the given timestamp
+     *
+     * @param $filepaths The list of actual JPG frames that exist
+     * @param $timestamp The timestamp we're looking for something close enough
+     * @return string The closest filepath
+     */
+    private function findClosest($filepaths, $timestamp)
+    {
+        $closest = null;
+
+        foreach ($filepaths as $filetime => $value) {
+            if ($closest === null || abs($timestamp - $closest) > abs($filetime - $timestamp)) {
+                $closest = $filetime;
+            }
+        }
+
+        return $filepaths[$closest];
     }
 
 }
