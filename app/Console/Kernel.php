@@ -31,9 +31,6 @@ class Kernel extends ConsoleKernel
             return false;
         }
 
-        $schedule->command('cam:save', [
-            '--frames' => env('TIME_LAPSE_GIF_FRAMES'),
-            '--delay' => env('TIME_LAPSE_GIF_ANIMATION_DELAY'),
-        ])->cron("*/$interval * * * * *");
+        $schedule->command('cam:save')->cron("*/$interval * * * * *");
     }
 }
