@@ -53,9 +53,33 @@ class MakeGifCommand extends Command {
             $close_enough[] = $this->findClosest($huge_range_of_files, $timestamp);
         }
 
-        $this->info(implode($close_enough, "\n"));
+        $animation = new \Imagick();
+        $animation->setFormat('GIF');
 
-        // TODO: Turn these files into a GIF
+        foreach ($close_enough as $filepath) {
+            try {
+                $frame = new \Imagick($filepath);
+                $animation->addImage($frame);
+                $animation->setImageDelay($delay);
+                $animation->nextImage();
+            } catch (\Exception $e) {
+                $error_message = 'Something weird happened while getting this frame. Skipping it.' . "\n";
+                $error_message .= $e->getMessage();
+                $this->error($error_message);
+            }
+        }
+
+        $gifs_dir = base_path('storage/images/gifs/');
+
+        if (!file_exists($gifs_dir)) {
+            mkdir($gifs_dir, 0755, true);
+        }
+
+        $gif_filename = date('Y-m-d_H-i-s', $start_int) . '.' . date('Y-m-d_H-i-s', $end_int) . '.gif';
+
+        $animation->writeImages($gifs_dir . $gif_filename, true);
+
+        $this->info('GIF output to: ' . $gifs_dir . $gif_filename);
     }
 
     /**
