@@ -65,6 +65,7 @@ class WebcamController extends Controller
         $response = $client->createPost($blog_name, [
             'type' => 'photo',
             'data' => $image_path,
+            'state' => env('TUMBLR_POST_STATE', 'published'),
         ]);
 
         $post_id = $response->id;
