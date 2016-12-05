@@ -45,7 +45,13 @@ class SaveFrameCommand extends Command {
         $filename = date('Y-m-d_H-i-s') . '.jpg';
 
         $this->info('Taking a pic: ' . $hour_dir . $filename);
-        copy($latest, $hour_dir . $filename);
+
+        touch($hour_dir . $filename);
+        for ($try_count=0; !filesize($hour_dir . $filename) && $try_count < 10; $try_count++) {
+            copy($latest, $hour_dir . $filename);
+            sleep(1);
+            clearstatcache();
+        }
     }
 
     /**
