@@ -80,11 +80,13 @@ class GifHelper
         }
 
         $animation = new \Imagick();
-        $animation->setFormat('GIF');
+        $animation->setFormat('gif');
 
         foreach ($close_enough as $filepath) {
             try {
                 $frame = new \Imagick($filepath);
+                $frame->scaleImage(500, 0);
+
                 $animation->addImage($frame);
                 $animation->setImageDelay($delay);
                 $animation->nextImage();
