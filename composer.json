@@ -9,7 +9,8 @@
         "laravel/lumen-framework": "5.3.*",
         "vlucas/phpdotenv": "~2.2",
         "tumblr/tumblr": "^0.2.0",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "symfony/dom-crawler": "^3.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
