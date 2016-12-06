@@ -39,12 +39,17 @@ class MakeGifCommand extends Command {
             $this->info("The GIF will span from $time_start to $time_end");
             $filename = GifHelper::makeGif($time_start, $time_end, $frame_count, $delay);
         } else {
+            $options = [
+                'frame_count' => $frame_count,
+                'delay' => $delay,
+            ];
+
             if ($sunrise_day) {
                 $this->info('The GIF will be created based on the sunrise');
-                $filename = GifHelper::makeGifOfSunrise($sunrise_day, env('CAMERA_CITY'), env('CAMERA_STATE'));
+                $filename = GifHelper::makeGifOfSunrise($sunrise_day, env('CAMERA_CITY'), env('CAMERA_STATE'), $options);
             } else {
                 $this->info('The GIF will be created based on the sunset');
-                $filename = GifHelper::makeGifOfSunset($sunset_day, env('CAMERA_CITY'), env('CAMERA_STATE'));
+                $filename = GifHelper::makeGifOfSunset($sunset_day, env('CAMERA_CITY'), env('CAMERA_STATE'), $options);
             }
         }
 
