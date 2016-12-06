@@ -2,6 +2,7 @@
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
+use \App\GifHelper;
 
 class MakeGifCommand extends Command {
 
@@ -33,53 +34,13 @@ class MakeGifCommand extends Command {
 
         $this->info("The GIF will span from $time_start to $time_end");
 
-        $start_int = strtotime($time_start);
-        $end_int = strtotime($time_end);
+        $filename = GifHelper::makeGif($time_start, $time_end, $frame_count, $delay);
 
-        // How many seconds the GIF should represent
-        $span_seconds = $end_int - $start_int;
-
-        // How many seconds should pass by per frame
-        $seconds_between_frames = $span_seconds / ($frame_count - 1);
-
-        for ($i = 0; $i < $frame_count; $i++) {
-            $frame_times[$i] = $start_int + ($seconds_between_frames * $i);
+        if ($filename) {
+            $this->info('GIF output to: ' . $filename);
+        } else {
+            $this->error('There was a problem. There may not be enough frames to make a GIF with that range yet :/');
         }
-
-        $huge_range_of_files = $this->getAllFilePaths($frame_times);
-
-        $close_enough = [];
-        foreach ($frame_times as $key => $timestamp) {
-            $close_enough[] = $this->findClosest($huge_range_of_files, $timestamp);
-        }
-
-        $animation = new \Imagick();
-        $animation->setFormat('GIF');
-
-        foreach ($close_enough as $filepath) {
-            try {
-                $frame = new \Imagick($filepath);
-                $animation->addImage($frame);
-                $animation->setImageDelay($delay);
-                $animation->nextImage();
-            } catch (\Exception $e) {
-                $error_message = 'Something weird happened while getting this frame. Skipping it.' . "\n";
-                $error_message .= $e->getMessage();
-                $this->error($error_message);
-            }
-        }
-
-        $gifs_dir = base_path('storage/images/gifs/');
-
-        if (!file_exists($gifs_dir)) {
-            mkdir($gifs_dir, 0755, true);
-        }
-
-        $gif_filename = date('Y-m-d_H-i-s', $start_int) . '.' . date('Y-m-d_H-i-s', $end_int) . '.gif';
-
-        $animation->writeImages($gifs_dir . $gif_filename, true);
-
-        $this->info('GIF output to: ' . $gifs_dir . $gif_filename);
     }
 
     /**
@@ -96,89 +57,4 @@ class MakeGifCommand extends Command {
             ['delay', null, InputOption::VALUE_OPTIONAL, 'The amount of time expressed in \'ticks\' that each frame should be displayed for', 20],
         ];
     }
-
-    /**
-     * Get the entire range of actual filepaths that we should choose our frames from
-     *
-     * @return string The filename
-     */
-    private function getAllFilePaths($frame_times)
-    {
-        $hour_dirs = $this->getAllHourDirectories($frame_times);
-
-        $jpgs = [];
-        foreach($hour_dirs as $dir) {
-            $jpgs += $this->getAllJpgs($dir);
-        }
-
-        return $jpgs;
-    }
-
-    /**
-     * Assemble a possible frame filepath for a given timestamp
-     *
-     * @return string The filename
-     */
-    private function getAllHourDirectories($frame_times)
-    {
-        $stills_dir = base_path('storage/images/stills/');
-
-        $hour_dirs = [];
-        foreach ($frame_times as $key => $time) {
-            $hour_dirs[] = $stills_dir . date('Y/m/d/H/', $time);
-        }
-
-        return array_unique($hour_dirs);
-    }
-
-    /**
-     * Get all JPG files from the given directory
-     *
-     * @return string The filename
-     */
-    private function getAllJpgs($dir)
-    {
-
-        if (!is_dir($dir)) {
-            return [];
-        }
-
-        $files = scandir($dir);
-
-        $jpgs = [];
-
-        foreach($files as $filename) {
-            $extension = pathinfo($filename, PATHINFO_EXTENSION);
-
-            if ($filename[0] === '.' || $extension !== 'jpg') {
-                continue;
-            }
-
-            $timestamp = \DateTime::createFromFormat('Y-m-d_H-i-s\.\j\p\g', $filename)->getTimestamp();
-            $jpgs[$timestamp] = $dir . $filename;
-        }
-
-        return $jpgs;
-    }
-
-    /**
-     * Find the closest filepath to the given timestamp
-     *
-     * @param $filepaths The list of actual JPG frames that exist
-     * @param $timestamp The timestamp we're looking for something close enough
-     * @return string The closest filepath
-     */
-    private function findClosest($filepaths, $timestamp)
-    {
-        $closest = null;
-
-        foreach ($filepaths as $filetime => $value) {
-            if ($closest === null || abs($timestamp - $closest) > abs($filetime - $timestamp)) {
-                $closest = $filetime;
-            }
-        }
-
-        return $filepaths[$closest];
-    }
-
 }
