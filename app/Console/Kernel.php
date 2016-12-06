@@ -33,8 +33,8 @@ class Kernel extends ConsoleKernel
             $schedule->command('cam:save')->cron("*/$interval * * * * *");
         }
 
-        $post_gif_sunrise_time = env('POST_DAILY_SUNRISE_GIF_AT', false)
-        $post_gif_sunset_time = env('POST_DAILY_SUNSET_GIF_AT', false)
+        $post_gif_sunrise_time = env('POST_DAILY_SUNRISE_GIF_AT', false);
+        $post_gif_sunset_time = env('POST_DAILY_SUNSET_GIF_AT', false);
 
         if ($post_gif_sunrise_time) {
             $schedule->command('gif:make --sunrise-day="today" --upload-to-tumblr')->dailyAt($post_gif_sunrise_time);
