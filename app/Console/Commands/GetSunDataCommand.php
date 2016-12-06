@@ -27,10 +27,12 @@ class GetSunDataCommand extends Command {
     public function fire()
     {
         $date = $this->input->getOption('date');
-        $place = $this->input->getOption('place');
+        $city = $this->input->getOption('city');
+        $state = $this->input->getOption('state');
 
-        $info = \App\AAhelper::getSunDataByDay($date, $place);
-        $json = json_encode($info, JSON_PRETTY_PRINT);
+        $sun_data = \App\AAhelper::getSunriseSunsetData($date, $city, $state);
+
+        $json = json_encode($sun_data, JSON_PRETTY_PRINT);
         $this->line($json);
     }
 
@@ -43,7 +45,8 @@ class GetSunDataCommand extends Command {
     {
         return [
             ['date', null, InputOption::VALUE_OPTIONAL, 'What day to get sun data for', 'today'],
-            ['place', null, InputOption::VALUE_OPTIONAL, 'The city and state to get sun data for', 'Queens, NY'],
+            ['city', null, InputOption::VALUE_OPTIONAL, 'The city to get sun data for', 'Queens'],
+            ['state', null, InputOption::VALUE_OPTIONAL, 'The state to get sun data for', 'NY'],
         ];
     }
 
