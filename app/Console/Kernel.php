@@ -26,13 +26,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $interval = env('TIME_LAPSE_GIF_CAPTURE_INTERVAL');
+        $interval = env('TIME_LAPSE_GIF_CAPTURE_INTERVAL', false);
         $interval = intval($interval);
 
-        if (!$interval) {
-            return false;
+        if ($interval) {
+            $schedule->command('cam:save')->cron("*/$interval * * * * *");
         }
 
-        $schedule->command('cam:save')->cron("*/$interval * * * * *");
     }
 }
