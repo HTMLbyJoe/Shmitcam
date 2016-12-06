@@ -4,6 +4,55 @@ namespace App;
 
 class GifHelper
 {
+    public static function makeGifOfSunrise($date, $city, $state, $options = [], $is_sunset = false)
+    {
+        $timestamp = strtotime($date);
+        $month_day = date('F j', $timestamp);
+
+        $default_options = [
+            'frame_count' => 20,
+            'delay' => 20,
+            'begin_offset' => 0,
+            'end_offset' => 0,
+        ];
+
+        $options = array_merge($default_options, $options);
+
+        $sun_data = \App\AAhelper::getSunriseSunsetData($month_day, $city, $state);
+
+        $offsets = [
+            'civil_twilight_begin' => env('GIF_SUNRISE_BEGIN_OFFSET', 0),
+            'sunrise' => env('GIF_SUNRISE_END_OFFSET', 0),
+            'sunset' => env('GIF_SUNSET_BEGIN_OFFSET', 0),
+            'civil_twilight_end' => env('GIF_SUNSET_END_OFFSET', 0),
+        ];
+
+        foreach ($sun_data as $key => $time) {
+            // Apply offsets set in .env
+            $sun_data[$key] = strtotime($time, $timestamp) + (60 * $offsets[$key]);
+        }
+
+        if (!$is_sunset) {
+            $time_begin = date('Y/m/d H:i:s', $sun_data['civil_twilight_begin']);
+            $time_end = date('Y/m/d H:i:s', $sun_data['sunrise']);
+        } else {
+            $time_begin = date('Y/m/d H:i:s', $sun_data['sunset']);
+            $time_end = date('Y/m/d H:i:s', $sun_data['civil_twilight_end']);
+        }
+
+        return self::makeGif(
+            $time_begin,
+            $time_end,
+            $options['frame_count'],
+            $options['delay']
+        );
+    }
+
+    public static function makeGifOfSunset($date, $city, $state, $options = [])
+    {
+        return self::makeGifOfSunrise($date, $city, $state, $options, true);
+    }
+
     public static function makeGif($time_start = '-3 hours', $time_end = 'now', $frame_count = 20, $delay = 20)
     {
         $start_int = strtotime($time_start);
