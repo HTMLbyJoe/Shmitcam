@@ -6,17 +6,71 @@ class GifHelper
 {
     public static function makeGifOfSunrise($date, $city, $state, $options = [], $is_sunset = false)
     {
-        $timestamp = strtotime($date);
-        $month_day = date('F j', $timestamp);
-
         $default_options = [
             'frame_count' => 20,
             'delay' => 20,
-            'begin_offset' => 0,
-            'end_offset' => 0,
         ];
 
         $options = array_merge($default_options, $options);
+
+        $sun_times = self::getSunTimes($date, $city, $state, $is_sunset);
+
+        $time_begin = $sun_times[0];
+        $time_end = $sun_times[1];
+
+        return self::makeGif(
+            $time_begin,
+            $time_end,
+            $options['frame_count'],
+            $options['delay']
+        );
+    }
+
+    public static function makeGifOfSunset($date, $city, $state, $options = [])
+    {
+        return self::makeGifOfSunrise($date, $city, $state, $options, true);
+    }
+
+    public static function makeVideoOfSunrise($options = [])
+    {
+        $default_options = [
+            'date' => 'today',
+            'city' => env('CAMERA_CITY'),
+            'state' => env('CAMERA_STATE'),
+            'framerate' => 30,
+            'is_sunset' => false,
+        ];
+
+        $options = array_merge($default_options, $options);
+
+        $date = $options['date'];
+        $city = $options['city'];
+        $state = $options['state'];
+        $is_sunset = $options['is_sunset'];
+        $framerate = $options['framerate'];
+
+        $sun_times = self::getSunTimes($date, $city, $state, $is_sunset);
+
+        $time_begin = $sun_times[0];
+        $time_end = $sun_times[1];
+
+        return self::makeVideo(
+            $time_begin,
+            $time_end,
+            $framerate
+        );
+    }
+
+    public static function makeVideoOfSunset($options = [])
+    {
+        $options['is_sunset'] = true;
+        return self::makeGifOfSunrise($options);
+    }
+
+    public static function getSunTimes($date, $city, $state, $is_sunset = false)
+    {
+        $timestamp = strtotime($date);
+        $month_day = date('F j', $timestamp);
 
         $sun_data = \App\AAhelper::getSunriseSunsetData($month_day, $city, $state);
 
@@ -40,17 +94,7 @@ class GifHelper
             $time_end = date('Y/m/d H:i:s', $sun_data['civil_twilight_end']);
         }
 
-        return self::makeGif(
-            $time_begin,
-            $time_end,
-            $options['frame_count'],
-            $options['delay']
-        );
-    }
-
-    public static function makeGifOfSunset($date, $city, $state, $options = [])
-    {
-        return self::makeGifOfSunrise($date, $city, $state, $options, true);
+        return [$time_begin, $time_end];
     }
 
     public static function makeGif($time_start = '-3 hours', $time_end = 'now', $frame_count = 20, $delay = 20)

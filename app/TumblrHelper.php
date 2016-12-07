@@ -4,7 +4,7 @@ namespace App;
 
 class TumblrHelper
 {
-    public static function upload($image_path)
+    public static function upload($image_path, $type = 'photo')
     {
         $blog_name = env('TUMBLR_BLOG_NAME');
         $consumer_key = env('TUMBLR_CONSUMER_KEY');
@@ -16,7 +16,7 @@ class TumblrHelper
         $client->setToken($token, $token_secret);
 
         $response = $client->createPost($blog_name, [
-            'type' => 'photo',
+            'type' => $type,
             'data' => $image_path,
             'state' => env('TUMBLR_POST_STATE', 'published'),
         ]);
