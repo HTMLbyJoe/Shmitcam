@@ -49,11 +49,11 @@ class Kernel extends ConsoleKernel
         $post_vid_sunset_time = env('POST_DAILY_SUNSET_VIDEO_AT', false);
 
         if ($post_vid_sunrise_time) {
-            $schedule->command('video:make --sunrise date="today" --upload-to-tumblr')->dailyAt($post_vid_sunrise_time);
+            $schedule->command('video:make --sunrise --date="today" --upload-to-tumblr')->dailyAt($post_vid_sunrise_time);
         }
 
         if ($post_vid_sunset_time) {
-            $schedule->command('video:make --sunset date="today" --upload-to-tumblr')->dailyAt($post_vid_sunset_time);
+            $schedule->command('video:make --sunset --date="today" --upload-to-tumblr')->dailyAt($post_vid_sunset_time);
         }
     }
 }
