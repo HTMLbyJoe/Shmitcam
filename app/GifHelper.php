@@ -94,6 +94,36 @@ class GifHelper
         return $gif_filepath;
     }
 
+    public static function makeVideo($time_start = '-3 hours', $time_end = 'now', $framerate = 30)
+    {
+        $start_int = strtotime($time_start);
+        $end_int = strtotime($time_end);
+
+        $huge_range_of_files = self::getAllFilePaths([$start_int, $end_int]);
+
+        if (empty($huge_range_of_files)) {
+            return false;
+        }
+
+        $frames = array_filter($huge_range_of_files, function ($time) use ($start_int, $end_int) {
+            return $time > $start_int && $time < $end_int;
+        }, ARRAY_FILTER_USE_KEY);
+
+        $vids_dir = base_path('storage/images/videos/');
+
+        if (!file_exists($vids_dir)) {
+            mkdir($vids_dir, 0755, true);
+        }
+
+        $vid_filename = date('Y-m-d_H-i-s', $start_int) . '.' . date('Y-m-d_H-i-s', $end_int) . '.mov';
+
+        $vid_filepath = $vids_dir . $vid_filename;
+
+        self::videoFromFrames($frames, $vid_filepath, $framerate);
+
+        return $vid_filepath;
+    }
+
     public static function gifFromFrames($frames, $gif_filepath, $delay = 20)
     {
         $animation = new \Imagick();
@@ -116,6 +146,33 @@ class GifHelper
         }
 
         $animation->writeImages($gif_filepath, true);
+    }
+
+    public static function videoFromFrames($frames, $video_filepath, $framerate = 30)
+    {
+        $video_temp_path = sys_get_temp_dir() . '/shmitcam/vid';
+
+        if (!is_dir($video_temp_path)) {
+            mkdir($video_temp_path, 0755, true);
+        }
+
+        array_map('unlink', glob("$video_temp_path/frame-*"));
+
+        $i = 0;
+        foreach ($frames as $filepath) {
+            copy($filepath, $video_temp_path . sprintf('/frame-%04d.jpg', $i));
+            $i++;
+        }
+
+        $framerate = 10;
+        $command = sprintf(
+            'avconv -framerate %d -f image2 -i %s/frame-%%04d.jpg -c:v h264 -crf 1 %s -y',
+            $framerate,
+            escapeshellarg($video_temp_path),
+            escapeshellarg($video_filepath)
+        );
+
+        return exec($command);
     }
 
     /**
