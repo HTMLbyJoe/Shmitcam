@@ -79,10 +79,27 @@ class GifHelper
             $close_enough[] = self::findClosest($huge_range_of_files, $timestamp);
         }
 
+        $gifs_dir = base_path('storage/images/gifs/');
+
+        if (!file_exists($gifs_dir)) {
+            mkdir($gifs_dir, 0755, true);
+        }
+
+        $gif_filename = date('Y-m-d_H-i-s', $start_int) . '.' . date('Y-m-d_H-i-s', $end_int) . '.gif';
+
+        $gif_filepath = $gifs_dir . $gif_filename;
+
+        self::gifFromFrames($close_enough, $gif_filepath, $delay);
+
+        return $gif_filepath;
+    }
+
+    public static function gifFromFrames($frames, $gif_filepath, $delay = 20)
+    {
         $animation = new \Imagick();
         $animation->setFormat('gif');
 
-        foreach ($close_enough as $filepath) {
+        foreach ($frames as $filepath) {
             try {
                 $frame = new \Imagick($filepath);
                 $frame->scaleImage(500, 0);
@@ -98,19 +115,8 @@ class GifHelper
             }
         }
 
-        $gifs_dir = base_path('storage/images/gifs/');
-
-        if (!file_exists($gifs_dir)) {
-            mkdir($gifs_dir, 0755, true);
-        }
-
-        $gif_filename = date('Y-m-d_H-i-s', $start_int) . '.' . date('Y-m-d_H-i-s', $end_int) . '.gif';
-
-        $animation->writeImages($gifs_dir . $gif_filename, true);
-
-        return $gifs_dir . $gif_filename;
+        $animation->writeImages($gif_filepath, true);
     }
-
 
     /**
      * Get the entire range of actual filepaths that we should choose our frames from
@@ -153,7 +159,6 @@ class GifHelper
      */
     private static function getAllJpgs($dir)
     {
-
         if (!is_dir($dir)) {
             return [];
         }
