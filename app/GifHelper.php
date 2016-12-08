@@ -143,7 +143,7 @@ class GifHelper
         $start_int = strtotime($time_start);
         $end_int = strtotime($time_end);
 
-        $huge_range_of_files = self::getAllFilePaths([$start_int, $end_int]);
+        $huge_range_of_files = self::getAllFilePathsByRange($start_int, $end_int);
 
         if (empty($huge_range_of_files)) {
             return false;
@@ -220,9 +220,28 @@ class GifHelper
     }
 
     /**
-     * Get the entire range of actual filepaths that we should choose our frames from
+     * Get the entire range of actual filepaths that we should choose
+     * our frames from, based on a start time and an end time
      *
-     * @return string The filename
+     * @return array Array of actual filenames
+     */
+    private static function getAllFilePathsByRange($start_int, $end_int)
+    {
+        $frame_times = [];
+        $seconds_in_an_hour = 3600;
+
+        for ($i = $start_int; $i <= $end_int; $i += $seconds_in_an_hour) {
+            $frame_times[] = $i;
+        }
+
+        return self::getAllFilePaths($frame_times);
+    }
+
+    /**
+     * Get the entire range of actual filepaths that we should
+     * choose our frames from, based on an array of times
+     *
+     * @return array Array of actual filenames
      */
     private static function getAllFilePaths($frame_times)
     {
@@ -237,16 +256,16 @@ class GifHelper
     }
 
     /**
-     * Assemble a possible frame filepath for a given timestamp
+     * Assemble possible frame directory paths for a set of given timestamps
      *
-     * @return string The filename
+     * @return array Array of directory paths
      */
     private static function getAllHourDirectories($frame_times)
     {
         $stills_dir = base_path('storage/images/stills/');
 
         $hour_dirs = [];
-        foreach ($frame_times as $key => $time) {
+        foreach ($frame_times as $time) {
             $hour_dirs[] = $stills_dir . date('Y/m/d/H/', $time);
         }
 
@@ -256,7 +275,7 @@ class GifHelper
     /**
      * Get all JPG files from the given directory
      *
-     * @return string The filename
+     * @return array Array of JPG filepaths
      */
     private static function getAllJpgs($dir)
     {

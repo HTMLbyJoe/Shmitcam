@@ -28,6 +28,9 @@ class MakeVideoCommand extends Command {
      */
     public function fire()
     {
+        $time_start = $this->input->getOption('time-start');
+        $time_end = $this->input->getOption('time-end');
+        $framerate = $this->input->getOption('framerate');
         $date = $this->input->getOption('date');
         $sunrise = $this->input->getOption('sunrise');
         $sunset = $this->input->getOption('sunset');
@@ -35,6 +38,7 @@ class MakeVideoCommand extends Command {
 
         $options = [
             'date' => $date,
+            'framerate' => $framerate,
         ];
 
         if ($sunrise) {
@@ -43,11 +47,18 @@ class MakeVideoCommand extends Command {
             $this->info('The video will be created based on the sunset');
             $options['is_sunset'] = true;
         } else {
-            $this->error('Must specify one of sunSET or sunRISE');
-            return;
+            $this->info("The video will span from $time_start to $time_end");
         }
 
-        $vid_filepath = GifHelper::makeVideoOfSunrise($options);
+        if ($sunrise || $sunset) {
+            $vid_filepath = GifHelper::makeVideoOfSunrise($options);
+        } else {
+            $vid_filepath = GifHelper::makeVideo(
+                $time_start,
+                $time_end,
+                $framerate
+            );
+        }
 
         if ($vid_filepath) {
             $this->info('Video output to: ' . $vid_filepath);
@@ -68,6 +79,9 @@ class MakeVideoCommand extends Command {
     protected function getOptions()
     {
         return [
+            ['time-start', null, InputOption::VALUE_OPTIONAL, 'What time the video should begin at (defaults to three hours ago)', date('Y-m-d H:i:s', strtotime('-3 hours'))],
+            ['time-end', null, InputOption::VALUE_OPTIONAL, 'What time the video should end at (defaults to now)', date('Y-m-d H:i:s')],
+            ['framerate', null, InputOption::VALUE_OPTIONAL, 'The framerate the video should be rendered in (in FPS)', 30],
             ['sunrise', 'r', InputOption::VALUE_NONE, 'Make the video of the sunrise'],
             ['sunset', 's', InputOption::VALUE_NONE, 'Make the video of the sunset'],
             ['date', null, InputOption::VALUE_OPTIONAL, 'What day to create the video of (will be made based on the sunrise/sunset times for the city and state set in .env)', 'today'],
