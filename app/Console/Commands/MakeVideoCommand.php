@@ -81,7 +81,7 @@ class MakeVideoCommand extends Command {
         return [
             ['time-start', null, InputOption::VALUE_OPTIONAL, 'What time the video should begin at (defaults to three hours ago)', date('Y-m-d H:i:s', strtotime('-3 hours'))],
             ['time-end', null, InputOption::VALUE_OPTIONAL, 'What time the video should end at (defaults to now)', date('Y-m-d H:i:s')],
-            ['framerate', null, InputOption::VALUE_OPTIONAL, 'The framerate the video should be rendered in (in FPS)', 30],
+            ['framerate', null, InputOption::VALUE_OPTIONAL, 'The framerate the video should be rendered in (in FPS)', 10],
             ['sunrise', 'r', InputOption::VALUE_NONE, 'Make the video of the sunrise'],
             ['sunset', 's', InputOption::VALUE_NONE, 'Make the video of the sunset'],
             ['date', null, InputOption::VALUE_OPTIONAL, 'What day to create the video of (will be made based on the sunrise/sunset times for the city and state set in .env)', 'today'],
