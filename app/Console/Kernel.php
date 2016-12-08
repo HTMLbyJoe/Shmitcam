@@ -49,18 +49,18 @@ class Kernel extends ConsoleKernel
         $post_vid_sunset_time = env('POST_DAILY_SUNSET_VIDEO_AT', false);
 
         if ($post_vid_sunrise_time) {
-            $schedule->command('video:make --sunrise --date="today" --upload-to-tumblr')->dailyAt($post_vid_sunrise_time);
+            $schedule->command('video:make --sunrise --date="today" --framerate="10" --upload-to-tumblr')->dailyAt($post_vid_sunrise_time);
         }
 
         if ($post_vid_sunset_time) {
-            $schedule->command('video:make --sunset --date="today" --upload-to-tumblr')->dailyAt($post_vid_sunset_time);
+            $schedule->command('video:make --sunset --date="today" --framerate="10" --upload-to-tumblr')->dailyAt($post_vid_sunset_time);
         }
 
         $post_vid_24hr_time = env('POST_DAILY_24_HOUR_VID_AT', false);
 
         if ($post_vid_24hr_time) {
             $cmd_vid_24hr = sprintf(
-                'video:make --time-start="yesterday %1$s - 5 min" --time-end="today %1$s - 5 min" --upload-to-tumblr',
+                'video:make --time-start="yesterday %1$s - 5 min" --time-end="today %1$s - 5 min" --framerate="30" --upload-to-tumblr',
                 $post_vid_24hr_time
             );
 
