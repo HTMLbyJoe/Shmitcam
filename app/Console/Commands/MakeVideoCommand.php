@@ -47,7 +47,11 @@ class MakeVideoCommand extends Command {
             $this->info('The video will be created based on the sunset');
             $options['is_sunset'] = true;
         } else {
-            $this->info("The video will span from $time_start to $time_end");
+            $nice_date_format = 'D, M jS Y @ g:i:s a';
+            $nice_time_start = date($nice_date_format, strtotime($time_start));
+            $nice_time_end = date($nice_date_format, strtotime($time_end));
+
+            $this->info("The video will span from $nice_time_start to $nice_time_end");
         }
 
         if ($sunrise || $sunset) {
