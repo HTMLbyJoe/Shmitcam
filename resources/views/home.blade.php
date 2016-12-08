@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Shmitcam</title>
+    <title>{{ $title }}</title>
     <link rel="stylesheet" href="/styles/main.css">
     <meta property="og:image" content="{{ $stream_url }}">
     <meta name="viewport" content="width=device-width">

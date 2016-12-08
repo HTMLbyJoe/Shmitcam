@@ -26,6 +26,7 @@ class HomeController extends Controller
         $blog_url = 'https://' . $blog_username . '.tumblr.com';
 
         $locals = [
+            'title' => env('WEBCAM_TITLE', 'The Shmitcam'),
             'stream_url' => route('cam.url.latest'),
             'shmitcam_js_global' => [
                 'url' => route('cam.url.latest'),
