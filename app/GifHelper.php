@@ -208,7 +208,6 @@ class GifHelper
             $i++;
         }
 
-        $framerate = 10;
         $command = sprintf(
             'avconv -framerate %d -f image2 -i %s/frame-%%04d.jpg -c:v libx264 -crf 1 %s -y',
             $framerate,
