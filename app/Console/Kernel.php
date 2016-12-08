@@ -64,7 +64,7 @@ class Kernel extends ConsoleKernel
                 $post_vid_24hr_time
             );
 
-            $schedule->command($cmd_vid_24hr)->dailyAt($post_vid_sunset_time);
+            $schedule->command($cmd_vid_24hr)->dailyAt($post_vid_24hr_time);
         }
     }
 }
